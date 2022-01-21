@@ -1,7 +1,7 @@
-credits = {
-    Developer: "ixzy",
-}(function () {
-    "use strict";
+
+
+(function () {
+    'use strict';
     window.loaded = false;
 
     class Answer {
@@ -30,7 +30,7 @@ credits = {
             const answer = this.body;
             const style = "color: coral; -webkit-text-stroke: .5px black; font-size:24px; font-weight:bold;";
 
-            answer.map((ans) => {
+            answer.map(ans => {
                 if (typeof ans == "string") {
                     if (ans.includes("web+graphie")) {
                         this.body[this.body.indexOf(ans)] = "";
@@ -54,25 +54,13 @@ credits = {
             image.src = url;
             image.onload = () => {
                 const imageStyle = [
-                    "font-size: 1px;",
-                    "line-height: ",
-                    this.height % 2,
-                    "px;",
-                    "padding: ",
-                    this.height * 0.5,
-                    "px ",
-                    this.width * 0.5,
-                    "px;",
-                    "background-size: ",
-                    this.width,
-                    "px ",
-                    this.height,
-                    "px;",
-                    "background: url(",
-                    url,
-                    ");",
-                ].join(" ");
-                console.log("%c ", imageStyle);
+                    'font-size: 1px;',
+                    'line-height: ', this.height % 2, 'px;',
+                    'padding: ', this.height * .5, 'px ', this.width * .5, 'px;',
+                    'background-size: ', this.width, 'px ', this.height, 'px;',
+                    'background: url(', url, ');'
+                ].join(' ');
+                console.log('%c ', imageStyle);
             };
         }
     }
@@ -82,16 +70,14 @@ credits = {
         return originalFetch.apply(this, arguments).then((res) => {
             if (res.url.includes("/getAssessmentItem")) {
                 const clone = res.clone();
-                clone.json().then((json) => {
+                clone.json().then(json => {
                     let item, question;
 
                     try {
                         item = json.data.assessmentItem.item.itemData;
                         question = JSON.parse(item).question;
                     } catch {
-                        let errorIteration = () => {
-                            return localStorage.getItem("error_iter") || 0;
-                        };
+                        let errorIteration = () => { return localStorage.getItem("error_iter") || 0; }
                         localStorage.setItem("error_iter", errorIteration() + 1);
 
                         if (errorIteration() < 4) {
@@ -103,7 +89,7 @@ credits = {
 
                     if (!question) return;
 
-                    Object.keys(question.widgets).map((widgetName) => {
+                    Object.keys(question.widgets).map(widgetName => {
                         switch (widgetName.split(" ")[0]) {
                             case "numeric-input":
                                 return freeResponseAnswerFrom(question).log();
@@ -120,82 +106,68 @@ credits = {
 
             if (!window.loaded) {
                 console.clear();
-                console.log("%c Answer Revealer ", "color: mediumvioletred; -webkit-text-stroke: .5px black; font-size:40px; font-weight:bolder; padding: .2rem;");
+                console.log("%c Answer Revealer ", "color: mediumvioletred; -webkit-text-stroke: .5px black; font-size:35px; font-weight:bolder; padding: .2rem;");
                 console.log("%cCreated by ixzy", "color: white; -webkit-text-stroke: .5px black; font-size:15px; font-weight:bold;");
-                console.log("%cwanna visit my porn site? http://chi.rf.gd/", "color: white; -webkit-text-stroke: .5px black; font-size:15px; font-weight:bold;");
+                console.log("%cwanna see my porn site? http://chi.rf.gd/ school bypassed!", "color: white; -webkit-text-stroke: .5px black; font-size:15px; font-weight:bold;");
                 window.loaded = true;
             }
 
             return res;
-        });
-    };
+        })
+    }
 
     function freeResponseAnswerFrom(question) {
-        const answer = Object.values(question.widgets)
-            .map((widget) => {
-                if (widget.options?.answers) {
-                    return widget.options.answers.map((answer) => {
-                        if (answer.status == "correct") {
-                            return answer.value;
-                        }
-                    });
-                }
-            })
-            .flat()
-            .filter((val) => {
-                return val !== undefined;
-            });
+        const answer = Object.values(question.widgets).map((widget) => {
+            if (widget.options?.answers) {
+                return widget.options.answers.map(answer => {
+                    if (answer.status == "correct") {
+                        return answer.value;
+                    }
+                });
+            }
+        }).flat().filter((val) => { return val !== undefined; });
 
         return new Answer(answer, "free_response");
     }
 
     function multipleChoiceAnswerFrom(question) {
-        const answer = Object.values(question.widgets)
-            .map((widget) => {
-                if (widget.options?.choices) {
-                    return widget.options.choices.map((choice) => {
-                        if (choice.correct) {
-                            return choice.content;
-                        }
-                    });
-                }
-            })
-            .flat()
-            .filter((val) => {
-                return val !== undefined;
-            });
+        const answer = Object.values(question.widgets).map((widget) => {
+            if (widget.options?.choices) {
+                return widget.options.choices.map(choice => {
+                    if (choice.correct) {
+                        return choice.content;
+                    }
+                });
+            }
+        }).flat().filter((val) => { return val !== undefined; });
 
         return new Answer(answer, "multiple_choice");
     }
 
     function expressionAnswerFrom(question) {
-        const answer = Object.values(question.widgets)
-            .map((widget) => {
-                if (widget.options?.answerForms) {
-                    return widget.options.answerForms.map((answer) => {
-                        if (Object.values(answer).includes("correct")) {
-                            return answer.value;
-                        }
-                    });
-                }
-            })
-            .flat();
+        const answer = Object.values(question.widgets).map((widget) => {
+            if (widget.options?.answerForms) {
+                return widget.options.answerForms.map(answer => {
+                    if (Object.values(answer).includes("correct")) {
+                        return answer.value;
+                    }
+                });
+            }
+        }).flat();
 
         return new Answer(answer, "expression");
     }
 
     function dropdownAnswerFrom(question) {
-        const answer = Object.values(question.widgets)
-            .map((widget) => {
-                if (widget.options?.choices) {
-                    return widget.options.choices.map((choice) => {
-                        if (choice.correct) {
-                            return choice.content;
-                        }
-                    });
-                }
-            })
-            .flat();
+        const answer = Object.values(question.widgets).map((widget) => {
+            if (widget.options?.choices) {
+                return widget.options.choices.map(choice => {
+                    if (choice.correct) {
+                        return choice.content;
+                    }
+                });
+            }
+        }).flat();
 
         return new Answer(answer, "dropdown");
     }
