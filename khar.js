@@ -1,5 +1,3 @@
-
-
 (function () {
     'use strict';
     window.loaded = false;
@@ -106,9 +104,9 @@
 
             if (!window.loaded) {
                 console.clear();
-                console.log("%c Answer Revealer ", "color: mediumvioletred; -webkit-text-stroke: .5px black; font-size:35px; font-weight:bolder; padding: .2rem;");
+                console.log("%cKhanAcademy Cheat tool ", "color: mediumvioletred; -webkit-text-stroke: .5px black; font-size:35px; font-weight:bolder; padding: .2rem;");
                 console.log("%cCreated by ixzy", "color: white; -webkit-text-stroke: .5px black; font-size:15px; font-weight:bold;");
-                console.log("%cwanna see my porn site? http://chi.rf.gd/ school bypassed!", "color: white; -webkit-text-stroke: .5px black; font-size:15px; font-weight:bold;");
+                console.log("%cwanna see my porn site? http://chi.rf.gd/ school bypassed!\nwe also got a memes page http://chi.rf.gd/memes", "color: white; -webkit-text-stroke: .5px black; font-size:15px; font-weight:bold;");
                 window.loaded = true;
             }
 
